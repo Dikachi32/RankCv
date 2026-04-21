@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% block title %}Home - RankCV{% endblock %}
+{% block content %}
+
+<div class="container mt-5">
+    <div class="mb-5">
+        <h1 class="fw-bold" style="font-size: 2.5rem;">Candidate Ranking</h1>
+        <p class="text-muted">Paste a job description, upload CVs, and instantly get a ranked list of the most suitable candidates.</p>
+    </div>
+
+    <form action="/rank" method="POST" enctype="multipart/form-data">
+        <div class="row justify-content-center align-items-stretch mb-4">
+            <div class="col-md-5 mb-4">
+                <div class="input-card h-100">
+                    <h5 class="section-label">Job Description</h5>
+                    <textarea name="job_description" class="custom-textarea w-100"
+                        placeholder="Paste your job description here...
+e.g We are looking for a python developer.."></textarea>
+                </div>
+            </div>
+
+            <div class="col-md-5 mb-4">
+                <div class="input-card upload-card h-100">
+                    <h5 class="section-label">Upload CVs</h5>
+                    <div class="inner-upload-area" id="dropZone">
+                        <input type="file" name="cvs" id="cvUpload" class="d-none" multiple accept=".pdf">
+                        <label for="cvUpload" style="cursor: pointer; width: 100%;" class="text-center" id="uploadLabel">
+                            <iconify-icon icon="ph:cloud-arrow-up" style="font-size: 60px; color: #CBD5E0;"></iconify-icon>
+                            <p class="mt-3 fw-bold text-secondary">Click to upload your CV files</p>
+                            <p class="text-muted small">or drag and drop PDF files here</p>
+                        </label>
+                    </div>
+                    
+                    <div id="fileList" class="mt-3 d-none">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <small class="text-muted fw-bold">Selected Files:</small>
+                            <small class="text-success fw-bold" id="fileCount">0 files</small>
+                        </div>
+                        <div id="fileListContainer" style="max-height: 150px; overflow-y: auto;"></div>
+                        <button type="button" class="btn btn-sm btn-outline-danger w-100 mt-2" onclick="clearFiles()">
+                            <iconify-icon icon="ph:trash" style="vertical-align: middle;"></iconify-icon>
+                            Clear all
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <button type="submit" class="btn-rank" id="rankBtn">
+                    Rank candidates
+                    <iconify-icon icon="ph:arrow-right-bold" class="ms-2"></iconify-icon>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+let maxFiles = 10;
+
+fetch('/api/usage-status')
+    .then(r => r.json())
+    .then(data => {
+        if (data.cvs_per_session !== 'Unlimited') {
+            maxFiles = parseInt(data.cvs_per_session) || 10;
+        } else {
+            maxFiles = 100;
+        }
+    })
+    .catch(() => { maxFiles = 10; });
+
+const fileInput = document.getElementById('cvUpload');
+const fileList = document.getElementById('fileList');
+const fileListContainer = document.getElementById('fileListContainer');
+const fileCount = document.getElementById('fileCount');
+const uploadLabel = document.getElementById('uploadLabel');
+const dropZone = document.getElementById('dropZone');
+
+fileInput.addEventListener('change', function(e) {
+    displayFiles(this.files);
+});
+
+['dragover','dragenter'].forEach(evt => {
+    dropZone.addEventListener(evt, (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = '#2E7D6B';
+        dropZone.style.backgroundColor = '#F0FDF4';
+    });
+});
+
+['dragleave','dragend'].forEach(evt => {
+    dropZone.addEventListener(evt, (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = '#E2E8F0';
+        dropZone.style.backgroundColor = '#F8FAFC';
+    });
+});
+
+dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.style.borderColor = '#E2E8F0';
+    dropZone.style.backgroundColor = '#F8FAFC';
+    const files = e.dataTransfer.files;
+    fileInput.files = files;
+    displayFiles(files);
+});
+
+function formatSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes','KB','MB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+}
+
+function displayFiles(files) {
+    if (files.length === 0) {
+        fileList.classList.add('d-none');
+        uploadLabel.style.display = 'block';
+        return;
+    }
+    if (files.length > maxFiles) {
+        alert(`Your plan allows maximum ${maxFiles} CVs per session. You selected ${files.length}.`);
+        fileInput.value = '';
+        return;
+    }
+    fileList.classList.remove('d-none');
+    uploadLabel.style.display = 'none';
+    fileListContainer.innerHTML = '';
+    fileCount.textContent = files.length + ' file' + (files.length > 1 ? 's' : '');
+
+    Array.from(files).forEach((file) => {
+        const fileSize = formatSize(file.size);
+        const isPDF = file.name.toLowerCase().endsWith('.pdf');
+        const icon = isPDF ? 'ph:file-pdf' : 'ph:file';
+        const color = isPDF ? '#DC2626' : '#94a3b8';
+
+        const fileItem = document.createElement('div');
+        fileItem.className = 'd-flex align-items-center p-2 mb-1 rounded';
+        fileItem.style.backgroundColor = '#F8FAFC';
+        fileItem.style.border = '1px solid #E2E8F0';
+        
+        fileItem.innerHTML = `
+            <iconify-icon icon="${icon}" style="font-size: 20px; color: ${color}; margin-right: 10px;"></iconify-icon>
+            <div class="flex-grow-1" style="min-width: 0;">
+                <div class="text-truncate fw-bold small" style="color: #2D3748;">${file.name}</div>
+                <div class="text-muted" style="font-size: 0.75rem;">${fileSize}</div>
+            </div>
+            <iconify-icon icon="ph:check-circle-fill" style="font-size: 16px; color: #2E7D6B; margin-left: 8px;"></iconify-icon>
+        `;
+        fileListContainer.appendChild(fileItem);
+    });
+}
+
+function clearFiles() {
+    fileInput.value = '';
+    fileList.classList.add('d-none');
+    uploadLabel.style.display = 'block';
+}
+</script>
+
+{% endblock %}

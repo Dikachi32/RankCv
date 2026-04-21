@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RankCV - Project Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            background: #0f0f0f;
+            color: #ffffff;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: all;
+        }
+
+        .slide.prev {
+            opacity: 0;
+            transform: translateX(-100px);
+        }
+
+        /* Slide 1 - Title */
+        .slide-1 {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        }
+
+        .slide-1 h1 {
+            font-size: 6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #e94560, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            letter-spacing: -2px;
+        }
+
+        .slide-1 .subtitle {
+            font-size: 2.2rem;
+            color: #ffffff;
+            font-weight: 400;
+            margin-bottom: 60px;
+        }
+
+        .slide-1 .author {
+            font-size: 1.3rem;
+            color: #e94560;
+            text-transform: none;
+            letter-spacing: 1px;
+        }
+
+        /* Slide 2 - How it Works */
+        .slide-2 {
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
+        }
+
+        .slide-2 h2 {
+            font-size: 3.5rem;
+            margin-bottom: 50px;
+            color: #e94560;
+        }
+
+        .steps-container {
+            display: flex;
+            gap: 40px;
+            max-width: 1200px;
+        }
+
+        .step-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(233, 69, 96, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            flex: 1;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .step-card:hover {
+            transform: translateY(-10px);
+            border-color: #e94560;
+        }
+
+        .step-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #e94560;
+            margin-bottom: 20px;
+        }
+
+        .step-text {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: #e0e0e0;
+        }
+
+        .step-text strong {
+            color: #ff6b6b;
+        }
+
+        .step-text .lib-name {
+            display: inline-block;
+            background: rgba(233, 69, 96, 0.15);
+            color: #ff6b6b;
+            padding: 2px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        /* Slide 3 - TF-IDF */
+        .slide-3 {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        .slide-3 h2 {
+            font-size: 3rem;
+            margin-bottom: 40px;
+            color: #e94560;
+        }
+
+        .tfidf-container {
+            display: flex;
+            gap: 50px;
+            max-width: 1100px;
+        }
+
+        .tfidf-box {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 40px;
+            flex: 1;
+            border-left: 4px solid #e94560;
+        }
+
+        .tfidf-box h3 {
+            font-size: 2rem;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+        }
+
+        .tfidf-box p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #d0d0d0;
+        }
+
+        .tfidf-box .example {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(233, 69, 96, 0.1);
+            border-radius: 10px;
+            font-style: italic;
+            color: #ff6b6b;
+        }
+
+        .sklearn-banner {
+            margin-top: 35px;
+            padding: 20px 40px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(233, 69, 96, 0.3);
+            border-radius: 15px;
+            text-align: center;
+            max-width: 900px;
+        }
+
+        .sklearn-banner p {
+            font-size: 1.2rem;
+            color: #d0d0d0;
+            line-height: 1.6;
+        }
+
+        .sklearn-banner strong {
+            color: #ff6b6b;
+        }
+
+        /* Slide 4 - Ranking */
+        .slide-4 {
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
+        }
+
+        .slide-4 h2 {
+            font-size: 3.5rem;
+            margin-bottom: 50px;
+            color: #e94560;
+        }
+
+        .ranking-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 800px;
+        }
+
+        .rank-bar {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(233, 69, 96, 0.2);
+        }
+
+        .rank-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #e94560;
+            width: 50px;
+        }
+
+        .rank-fill {
+            flex: 1;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .rank-fill-inner {
+            height: 100%;
+            border-radius: 20px;
+            background: linear-gradient(90deg, #e94560, #ff6b6b);
+            transition: width 1s ease;
+        }
+
+        .rank-label {
+            font-size: 1.2rem;
+            color: #a0a0a0;
+            width: 150px;
+            text-align: right;
+        }
+
+        /* Slide 5 - Features & Conclusion */
+        .slide-5 {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        }
+
+        .slide-5 h2 {
+            font-size: 4rem;
+            margin-bottom: 40px;
+            color: #e94560;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            max-width: 900px;
+            margin-bottom: 50px;
+        }
+
+        .feature-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(233, 69, 96, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: left;
+        }
+
+        .feature-item h4 {
+            color: #ff6b6b;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .feature-item p {
+            color: #d0d0d0;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .thank-you {
+            font-size: 3rem;
+            font-weight: 300;
+            letter-spacing: 10px;
+            text-transform: uppercase;
+            color: #e94560;
+        }
+
+        /* Navigation Controls */
+        .nav-controls {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: rgba(233, 69, 96, 0.2);
+            border: 2px solid #e94560;
+            color: #e94560;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: #e94560;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .nav-dots {
+            display: flex;
+            gap: 12px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dot:hover {
+            background: rgba(233, 69, 96, 0.5);
+        }
+
+        .dot.active {
+            background: #e94560;
+            transform: scale(1.3);
+        }
+
+        /* Timer Display */
+        .timer-display {
+            position: fixed;
+            top: 30px;
+            right: 40px;
+            font-size: 1.2rem;
+            color: #e94560;
+            font-weight: 600;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: 1px solid rgba(233, 69, 96, 0.3);
+        }
+
+        /* Slide Counter */
+        .slide-counter {
+            position: fixed;
+            top: 30px;
+            left: 40px;
+            font-size: 1rem;
+            color: #666;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 30px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #e94560, #ff6b6b);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        /* Swipe Areas */
+        .swipe-area {
+            position: fixed;
+            top: 0;
+            width: 15%;
+            height: 100%;
+            z-index: 999;
+            cursor: pointer;
+        }
+
+        .swipe-left {
+            left: 0;
+        }
+
+        .swipe-right {
+            right: 0;
+        }
+
+        .swipe-hint {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 3rem;
+            color: rgba(233, 69, 96, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .swipe-left .swipe-hint {
+            left: 20px;
+        }
+
+        .swipe-right .swipe-hint {
+            right: 20px;
+        }
+
+        .swipe-area:hover .swipe-hint {
+            opacity: 1;
+        }
+
+        /* Keyboard hint */
+        .keyboard-hint {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            color: #444;
+            z-index: 1000;
+            opacity: 0.7;
+        }
+
+        /* Exit Button */
+        .exit-btn {
+            position: fixed;
+            top: 30px;
+            right: 180px;
+            z-index: 1001;
+            background: rgba(233, 69, 96, 0.2);
+            border: 2px solid #e94560;
+            color: #e94560;
+            padding: 8px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .exit-btn:hover {
+            background: #e94560;
+            color: white;
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .slide-1 h1 { font-size: 3.5rem; }
+            .slide-1 .subtitle { font-size: 1.5rem; }
+            .steps-container { flex-direction: column; gap: 20px; }
+            .tfidf-container { flex-direction: column; }
+            .ranking-visual { width: 90vw; }
+            .features-grid { grid-template-columns: 1fr; }
+            .exit-btn { right: 20px; top: 80px; }
+            .step-text { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Exit Presentation Button -->
+    <a href="/" class="exit-btn">← Exit to App</a>
+
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide slide-1 active" data-slide="1">
+            <h1>RankCV</h1>
+            <p class="subtitle">AI-Powered CV Ranking System</p>
+            <p class="author">Built with Flask by Dikachi</p>
+        </div>
+
+        <!-- Slide 2: How it Works -->
+        <div class="slide slide-2" data-slide="2">
+            <h2>How It Works</h2>
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-number">01</div>
+                    <p class="step-text">
+                        User enters a <strong>job description</strong> and <strong>uploads CVs</strong> as PDF files. The system validates file types and enforces the user's plan limits (Free, Basic, Pro, or Premium) before accepting the upload.
+                    </p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">02</div>
+                    <p class="step-text">
+                        <strong>PyPDF2</strong> opens each PDF and extracts raw text from every page, stripping away images and formatting. Then <strong>scikit-learn</strong> takes over — its <em>TfidfVectorizer</em> converts the text into numerical vectors, and <em>cosine_similarity</em> scores each CV against the job description (0–100%).
+                    </p>
+                    <span class="lib-name">Libraries: PyPDF2 + scikit-learn</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: TF-IDF & Scikit-Learn -->
+        <div class="slide slide-3" data-slide="3">
+            <h2>TF-IDF & Scikit-Learn</h2>
+            <div class="tfidf-container">
+                <div class="tfidf-box">
+                    <h3>TF</h3>
+                    <p><strong>Term Frequency</strong> counts how often a word appears in a document. If "Python" appears many times in a CV, TF marks it as important.</p>
+                    <div class="example">"Python" appears 12 times → High TF score</div>
+                </div>
+                <div class="tfidf-box">
+                    <h3>IDF</h3>
+                    <p><strong>Inverse Document Frequency</strong> down-weights words that appear in every document (like "the", "and", "is") so only unique, meaningful terms influence the ranking.</p>
+                    <div class="example">"the" appears in every CV → IDF score near zero</div>
+                </div>
+            </div>
+
+            <div class="sklearn-banner">
+                <p>
+                    <strong>scikit-learn</strong> is the Python machine-learning library that powers RankCV.<br>
+                    It provides <strong>TfidfVectorizer</strong> to build the TF-IDF matrix and <strong>cosine_similarity</strong> to measure how close each CV vector is to the job description vector — producing the final 0–100% match score.
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Ranking -->
+        <div class="slide slide-4" data-slide="4">
+            <h2>Ranking System</h2>
+            <div class="ranking-visual">
+                <div class="rank-bar">
+                    <div class="rank-number">1</div>
+                    <div class="rank-fill">
+                        <div class="rank-fill-inner" style="width: 95%"></div>
+                    </div>
+                    <div class="rank-label">Best Match</div>
+                </div>
+                <div class="rank-bar">
+                    <div class="rank-number">2</div>
+                    <div class="rank-fill">
+                        <div class="rank-fill-inner" style="width: 75%"></div>
+                    </div>
+                    <div class="rank-label">Good Match</div>
+                </div>
+                <div class="rank-bar">
+                    <div class="rank-number">3</div>
+                    <div class="rank-fill">
+                        <div class="rank-fill-inner" style="width: 45%"></div>
+                    </div>
+                    <div class="rank-label">Low Match</div>
+                </div>
+            </div>
+            <p style="margin-top: 50px; font-size: 1.4rem; color: #a0a0a0;">
+                More similar words → <span style="color: #e94560">Higher Score</span><br>
+                Less similar → <span style="color: #666">Lower Score</span>
+            </p>
+        </div>
+
+        <!-- Slide 5: Features & Conclusion -->
+        <div class="slide slide-5" data-slide="5">
+            <h2>Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>🔐 Authentication</h4>
+                    <p>Secure user registration & login with Werkzeug password hashing</p>
+                </div>
+                <div class="feature-item">
+                    <h4>📊 Usage Limits</h4>
+                    <p>Free, Basic ($10), Pro ($20), Premium ($50) subscription tiers enforced per session</p>
+                </div>
+                <div class="feature-item">
+                    <h4>📜 History</h4>
+                    <p>Save and revisit past ranking sessions with full result breakdowns</p>
+                </div>
+                <div class="feature-item">
+                    <h4>⚙️ Settings</h4>
+                    <p>Customize experience filters, score bars, CV limits, and data privacy</p>
+                </div>
+            </div>
+            <p class="thank-you pulse">Thank You</p>
+        </div>
+    </div>
+
+    <!-- Swipe Areas -->
+    <div class="swipe-area swipe-left" onclick="prevSlide()">
+        <div class="swipe-hint">‹</div>
+    </div>
+    <div class="swipe-area swipe-right" onclick="nextSlide()">
+        <div class="swipe-hint">›</div>
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="nav-controls">
+        <button class="nav-btn" id="prevBtn" onclick="prevSlide()">‹</button>
+        <div class="nav-dots">
+            <div class="dot active" onclick="goToSlide(0)"></div>
+            <div class="dot" onclick="goToSlide(1)"></div>
+            <div class="dot" onclick="goToSlide(2)"></div>
+            <div class="dot" onclick="goToSlide(3)"></div>
+            <div class="dot" onclick="goToSlide(4)"></div>
+        </div>
+        <button class="nav-btn" id="nextBtn" onclick="nextSlide()">›</button>
+    </div>
+
+    <!-- UI Elements -->
+    <div class="timer-display">01:00</div>
+    <div class="slide-counter">Slide 1 / 5</div>
+    <div class="progress-container">
+        <div class="progress-bar"></div>
+    </div>
+    <div class="keyboard-hint">Use ← → arrows, click dots, or swipe to navigate | ESC to exit</div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        const timerDisplay = document.querySelector('.timer-display');
+        const slideCounter = document.querySelector('.slide-counter');
+        const progressBar = document.querySelector('.progress-bar');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+        const slideDuration = 60000;
+        let startTime = Date.now();
+        let timerInterval;
+
+        function updateTimer() {
+            const elapsed = Date.now() - startTime;
+            const remaining = Math.max(0, slideDuration - elapsed);
+            const seconds = Math.ceil(remaining / 1000);
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
+            const progress = (elapsed / slideDuration) * 100;
+            progressBar.style.width = `${Math.min(100, progress)}%`;
+
+            if (remaining < 10000) {
+                timerDisplay.style.color = '#ff3333';
+                timerDisplay.style.borderColor = '#ff3333';
+            } else {
+                timerDisplay.style.color = '#e94560';
+                timerDisplay.style.borderColor = 'rgba(233, 69, 96, 0.3)';
+            }
+        }
+
+        function updateSlide() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'prev');
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                } else if (index < currentSlide) {
+                    slide.classList.add('prev');
+                }
+            });
+
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+
+            slideCounter.textContent = `Slide ${currentSlide + 1} / ${totalSlides}`;
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+
+            startTime = Date.now();
+            timerDisplay.style.color = '#e94560';
+            timerDisplay.style.borderColor = 'rgba(233, 69, 96, 0.3)';
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        function goToSlide(index) {
+            if (index >= 0 && index < totalSlides) {
+                currentSlide = index;
+                updateSlide();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                goToSlide(0);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                goToSlide(totalSlides - 1);
+            } else if (e.key === 'Escape') {
+                window.location.href = '/';
+            }
+        });
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, false);
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, false);
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }
+        }
+
+        let wheelTimeout;
+        document.addEventListener('wheel', (e) => {
+            clearTimeout(wheelTimeout);
+            wheelTimeout = setTimeout(() => {
+                if (e.deltaY > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }, 50);
+        });
+
+        timerInterval = setInterval(updateTimer, 100);
+        updateSlide();
+    </script>
+</body>
+</html>

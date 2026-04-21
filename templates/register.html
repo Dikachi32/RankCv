@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Register - RankCV{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card card-custom shadow-lg p-4">
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold" style="color: #2E7D6B;">Create Account</h2>
+                    <p class="text-muted">Get started with RankCV</p>
+                </div>
+                
+                <form method="POST" action="{{ url_for('register') }}">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Email Address</label>
+                        <input type="email" name="email" class="form-control settings-input" placeholder="you@example.com" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Password</label>
+                        <input type="password" name="password" class="form-control settings-input" placeholder="••••••••" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Confirm Password</label>
+                        <input type="password" name="confirm_password" class="form-control settings-input" placeholder="••••••••" required>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-rank btn-lg">
+                            Create Account
+                            <iconify-icon icon="ph:user-plus" class="ms-2"></iconify-icon>
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="text-center mt-3">
+                    <p class="text-muted">Already have an account? <a href="{{ url_for('login') }}" style="color: #2E7D6B; font-weight: 600;">Log In</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

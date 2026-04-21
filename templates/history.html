@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}History - RankCV{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="mb-4">
+        <h1 class="fw-bold" style="font-size: 2.5rem;">Ranking History</h1>
+        <p class="text-muted">View and manage all your previous candidate ranking activities.</p>
+    </div>
+
+    {% if history_data %}
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="search-box">
+            <iconify-icon icon="ph:magnifying-glass" class="search-icon"></iconify-icon>
+            <input type="text" class="form-control search-input" id="historySearch" placeholder="Search based on job title...">
+        </div>
+        <select class="form-select filter-dropdown" id="historyFilter">
+            <option value="all">Overall</option>
+            <option value="7days">Last 7 days</option>
+            <option value="30days">Last 30 days</option>
+            <option value="high">Highest Match</option>
+        </select>
+    </div>
+
+    <div class="history-list" id="historyList">
+        {% for item in history_data %}
+        <div class="card card-custom shadow-sm mb-3 history-card" 
+             data-title="{{ item.job_title|lower }}" 
+             data-score="{{ item.top_score }}" 
+             data-date="{{ item.date_raw }}">
+            <div class="row align-items-center g-0">
+                <div class="col-auto">
+                    <div class="history-icon-box 
+                        {% if item.top_score >= 90 %}icon-green
+                        {% elif item.top_score >= 70 %}icon-blue
+                        {% elif item.top_score >= 50 %}icon-orange
+                        {% else %}icon-red{% endif %}">
+                        <iconify-icon icon="ph:briefcase" style="font-size: 24px; color: white;"></iconify-icon>
+                    </div>
+                </div>
+                
+                <div class="col ms-3">
+                    <h5 class="fw-bold mb-1 job-title">{{ item.job_title }}</h5>
+                    <p class="text-muted small mb-0 job-meta">{{ item.date }} • {{ item.cv_count }} CVs uploaded</p>
+                </div>
+                
+                <div class="col-auto text-end match-info">
+                    <div class="match-percentage 
+                        {% if item.top_score >= 90 %}text-success
+                        {% elif item.top_score >= 70 %}text-warning
+                        {% elif item.top_score >= 50 %}text-orange
+                        {% else %}text-danger{% endif %}">
+                        {{ item.top_score }}%
+                    </div>
+                    <div class="top-match-label">top match</div>
+                    <div class="candidate-name">{{ item.top_candidate }}</div>
+                </div>
+                
+                <div class="col-auto ms-3">
+                    <a href="{{ url_for('view_history_detail', history_id=item.id) }}" 
+                       class="btn btn-sm btn-outline-primary" 
+                       style="border-radius: 8px;">
+                        <iconify-icon icon="ph:eye" style="vertical-align: middle;"></iconify-icon>
+                        View
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    
+    <div class="text-center py-5 mt-5">
+        <div class="empty-icon mb-3">
+            <iconify-icon icon="ph:clock-counter-clockwise" style="font-size: 60px; color: #CBD5E0;"></iconify-icon>
+        </div>
+        <h4 class="fw-bold text-muted">No History Found</h4>
+        <p class="text-muted">Your ranked sessions will appear here once you complete a ranking.</p>
+        <a href="{{ url_for('home') }}" class="btn btn-rank px-4 mt-2">Start a New Ranking</a>
+    </div>
+    
+    {% endif %}
+</div>
+
+<script>
+(function() {
+    const searchInput = document.getElementById('historySearch');
+    const filterSelect = document.getElementById('historyFilter');
+    const cards = document.querySelectorAll('.history-card');
+    
+    if (!cards.length) return;
+
+    function filterHistory() {
+        const term = searchInput ? searchInput.value.toLowerCase() : '';
+        const filter = filterSelect ? filterSelect.value : 'all';
+        const now = new Date();
+        
+        cards.forEach(card => {
+            const title = card.dataset.title || '';
+            const score = parseFloat(card.dataset.score) || 0;
+            const cardDate = new Date(card.dataset.date || '');
+            let show = true;
+            
+            if (term && !title.includes(term)) show = false;
+            
+            if (filter === '7days') {
+                const daysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                if (cardDate < daysAgo) show = false;
+            } else if (filter === '30days') {
+                const daysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+                if (cardDate < daysAgo) show = false;
+            } else if (filter === 'high') {
+                if (score < 70) show = false;
+            }
+            
+            card.style.display = show ? 'block' : 'none';
+        });
+    }
+    
+    if (searchInput) searchInput.addEventListener('input', filterHistory);
+    if (filterSelect) filterSelect.addEventListener('change', filterHistory);
+})();
+</script>
+
+{% endblock %}

@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}Changelog - RankCV{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold mb-3" style="color: #2E7D6B;">Changelog</h1>
+                <p class="lead text-muted">Track the evolution of RankCV</p>
+            </div>
+
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <span class="badge me-3" style="background-color: #2E7D6B; font-size: 0.9rem;">v1.2.0</span>
+                        <span class="text-muted"><iconify-icon icon="streamline-ultimate:calendar-bold" class="me-1"></iconify-icon> April 2026</span>
+                        <span class="badge ms-auto" style="background-color: #dc3545;">Latest</span>
+                    </div>
+                    <h4 class="card-title mb-3">Profile & Subscription Management</h4>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2 d-flex">
+                            <iconify-icon icon="streamline-ultimate:check-circle-bold" class="me-2 flex-shrink-0" style="color: #2E7D6B;"></iconify-icon>
+                            <span>Added user profile page with photo upload functionality</span>
+                        </li>
+                        <li class="mb-2 d-flex">
+                            <iconify-icon icon="streamline-ultimate:check-circle-bold" class="me-2 flex-shrink-0" style="color: #2E7D6B;"></iconify-icon>
+                            <span>Implemented subscription plans (Free, Basic, Pro, Premium) with daily limits</span>
+                        </li>
+                        <li class="mb-2 d-flex">
+                            <iconify-icon icon="streamline-ultimate:check-circle-bold" class="me-2 flex-shrink-0" style="color: #2E7D6B;"></iconify-icon>
+                            <span>Added pricing page with plan comparison and upgrade flow</span>
+                        </li>
+                        <li class="mb-2 d-flex">
+                            <iconify-icon icon="streamline-ultimate:check-circle-bold" class="me-2 flex-shrink-0" style="color: #2E7D6B;"></iconify-icon>
+                            <span>Enhanced footer with Product links and animated social icons</span>
+                        </li>
+                        <li class="d-flex">
+                            <iconify-icon icon="streamline-ultimate:check-circle-bold" class="me-2 flex-shrink-0" style="color: #2E7D6B;"></iconify-icon>
+                            <span>Added usage tracking and daily limit enforcement</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <span class="badge me-3 bg-secondary" style="font-size: 0.9rem;">v1.1.0</span>
+                        <span class="text-muted"><iconify-icon icon="streamline-ultimate:calendar-bold" class="me-1"></iconify-icon> March 2026</span>
+                    </div>
+                    <h4 class="card-title mb-3">History & Settings</h4>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2 d-flex">
+                            <iconify-icon icon="streamline-ultimate:check-circle-bold" class="me-2 flex-shrink-0" style="color: #2E7D6B;"></iconify-icon>
+                            <span>Added ranking history page with session details and JSON results storage</span>
+                        </li>
+                        <li class="mb-2 d-flex">
+                            <iconify-icon icon="streamline-ultimate:check-circle-bold" class="me-2 flex-shrink-0" style="color: #2E7D6B;"></iconify-icon>
+                            <span>Implemented user settings (experience filters, score bar toggle, CV saving preferences)</span>
+                        </li>
+                        <li class="mb-2 d-flex">
+                            <iconify-icon icon="streamline-ultimate:check-circle-bold" class="me-2 flex-shrink-0" style="color: #2E7D6B;"></iconify-icon>
+                            <span>Added drag-and-drop CV upload with file preview</span>
+                        </li>
+                        <li class="d-flex">
+                            <iconify-icon icon="streamline-ultimate:check-circle-bold" class="me-2 flex-shrink-0" style="color: #2E7D6B;"></iconify-icon>
+                            <span>Enhanced flash message system with Bootstrap toasts</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <span class="badge me-3 bg-secondary" style="font-size: 0.9rem;">v1.0.0</span>
+                        <span class="text-muted"><iconify-icon icon="streamline-ultimate:calendar-bold" class="me-1"></iconify-icon> February 2026</span>
+                    </div>
+                    <h4 class="card-title mb-3">Initial Release</h4>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2 d-flex">
+                            <iconify-icon icon="streamline-ultimate:check-circle-bold" class="me-2 flex-shrink-0" style="color: #2E7D6B;"></iconify-icon>
+                            <span>Core TF-IDF cosine similarity ranking engine</span>
+                        </li>
+                        <li class="mb-2 d-flex">
+                            <iconify-icon icon="streamline-ultimate:check-circle-bold" class="me-2 flex-shrink-0" style="color: #2E7D6B;"></iconify-icon>
+                            <span>User authentication with session-based login</span>
+                        </li>
+                        <li class="mb-2 d-flex">
+                            <iconify-icon icon="streamline-ultimate:check-circle-bold" class="me-2 flex-shrink-0" style="color: #2E7D6B;"></iconify-icon>
+                            <span>PDF text extraction with PyPDF2</span>
+                        </li>
+                        <li class="mb-2 d-flex">
+                            <iconify-icon icon="streamline-ultimate:check-circle-bold" class="me-2 flex-shrink-0" style="color: #2E7D6B;"></iconify-icon>
+                            <span>Bootstrap 5 responsive UI with brand color theming</span>
+                        </li>
+                        <li class="d-flex">
+                            <iconify-icon icon="streamline-ultimate:check-circle-bold" class="me-2 flex-shrink-0" style="color: #2E7D6B;"></iconify-icon>
+                            <span>MySQL database integration with SQLAlchemy ORM</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm mt-5">
+                <div class="card-body p-4">
+                    <h4 class="card-title mb-3" style="color: #2E7D6B;">
+                        <iconify-icon icon="streamline-ultimate:map-roadmap-bold" class="me-2"></iconify-icon>
+                        Coming Soon
+                    </h4>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2 d-flex">
+                            <iconify-icon icon="streamline-ultimate:hourglass-bold" class="me-2 flex-shrink-0" style="color: #DD6B20;"></iconify-icon>
+                            <span>DOCX and TXT file format support</span>
+                        </li>
+                        <li class="mb-2 d-flex">
+                            <iconify-icon icon="streamline-ultimate:hourglass-bold" class="me-2 flex-shrink-0" style="color: #DD6B20;"></iconify-icon>
+                            <span>AI-powered experience extraction and filtering</span>
+                        </li>
+                        <li class="mb-2 d-flex">
+                            <iconify-icon icon="streamline-ultimate:hourglass-bold" class="me-2 flex-shrink-0" style="color: #DD6B20;"></iconify-icon>
+                            <span>Export ranking results to CSV and PDF reports</span>
+                        </li>
+                        <li class="mb-2 d-flex">
+                            <iconify-icon icon="streamline-ultimate:hourglass-bold" class="me-2 flex-shrink-0" style="color: #DD6B20;"></iconify-icon>
+                            <span>Stripe payment integration for real subscriptions</span>
+                        </li>
+                        <li class="d-flex">
+                            <iconify-icon icon="streamline-ultimate:hourglass-bold" class="me-2 flex-shrink-0" style="color: #DD6B20;"></iconify-icon>
+                            <span>Team collaboration and shared workspaces</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

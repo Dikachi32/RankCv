@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}FAQ - RankCV{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold mb-3" style="color: #2E7D6B;">Frequently Asked Questions</h1>
+                <p class="lead text-muted">Everything you need to know about RankCV</p>
+            </div>
+
+            <div class="accordion" id="faqAccordion">
+                <div class="accordion-item border-0 mb-3 shadow-sm">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" style="color: #2E7D6B; font-weight: 600;">
+                            <iconify-icon icon="streamline-ultimate:question-circle-bold" class="me-2"></iconify-icon>
+                            What file formats are supported for CV upload?
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Currently, RankCV supports <strong>PDF files only</strong>. We use PyPDF2 to extract text content from PDF resumes. Ensure your CVs are text-based PDFs (not scanned images) for best results. Support for DOCX and other formats is planned for future releases.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0 mb-3 shadow-sm">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" style="color: #2E7D6B; font-weight: 600;">
+                            <iconify-icon icon="streamline-ultimate:question-circle-bold" class="me-2"></iconify-icon>
+                            How does the AI ranking actually work?
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            RankCV uses <strong>TF-IDF (Term Frequency-Inverse Document Frequency)</strong> combined with <strong>cosine similarity</strong>. Here's how: <br><br>
+                            1. <strong>Vectorization:</strong> We convert both the job description and each CV into numerical vectors based on word importance.<br>
+                            2. <strong>Similarity Scoring:</strong> We calculate the cosine similarity between the job description vector and each CV vector.<br>
+                            3. <strong>Ranking:</strong> Candidates are sorted by similarity score (0-100%), with the closest matches appearing first.<br><br>
+                            This is a proven information retrieval technique used by search engines and recommendation systems.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0 mb-3 shadow-sm">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" style="color: #2E7D6B; font-weight: 600;">
+                            <iconify-icon icon="streamline-ultimate:question-circle-bold" class="me-2"></iconify-icon>
+                            Is my data secure? Are CVs stored permanently?
+                        </button>
+                    </h2>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            <strong>Your data security is our priority.</strong> By default, CVs are processed in-memory and not stored permanently. You can enable "Save CVs" in your settings if you want to keep them for future reference. All data is encrypted in transit and at rest. We never share your candidate data with third parties. For enterprise users, we offer additional compliance features including GDPR data deletion requests.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0 mb-3 shadow-sm">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" style="color: #2E7D6B; font-weight: 600;">
+                            <iconify-icon icon="streamline-ultimate:question-circle-bold" class="me-2"></iconify-icon>
+                            What are the daily limits for each plan?
+                        </button>
+                    </h2>
+                    <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2"><strong>Free:</strong> 10 CVs per session, 1 session per day</li>
+                                <li class="mb-2"><strong>Basic ($10/month):</strong> 25 CVs per session, 2 sessions per day</li>
+                                <li class="mb-2"><strong>Pro ($20/month):</strong> 50 CVs per session, 3 sessions per day</li>
+                                <li><strong>Premium ($50/month):</strong> Unlimited CVs and sessions</li>
+                            </ul>
+                            <div class="alert alert-info mt-3 mb-0" style="background-color: rgba(46, 125, 107, 0.1); border-color: #2E7D6B; color: #1a5245;">
+                                <iconify-icon icon="streamline-ultimate:information-circle-bold" class="me-2"></iconify-icon>
+                                Limits reset daily at midnight UTC. You can upgrade or downgrade your plan at any time from the <a href="{{ url_for('pricing') }}" style="color: #2E7D6B; font-weight: 600;">Pricing page</a>.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0 mb-3 shadow-sm">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5" style="color: #2E7D6B; font-weight: 600;">
+                            <iconify-icon icon="streamline-ultimate:question-circle-bold" class="me-2"></iconify-icon>
+                            Can I export or share the ranking results?
+                        </button>
+                    </h2>
+                    <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Yes! All ranking results are saved to your <a href="{{ url_for('history') }}" style="color: #2E7D6B;">History</a> page. From there, you can view detailed breakdowns of each session. Export functionality (CSV, Excel, PDF reports) is coming soon for Pro and Premium users. Currently, you can copy results or take screenshots to share with your team.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0 mb-3 shadow-sm">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6" style="color: #2E7D6B; font-weight: 600;">
+                            <iconify-icon icon="streamline-ultimate:question-circle-bold" class="me-2"></iconify-icon>
+                            How do I update my profile picture?
+                        </button>
+                    </h2>
+                    <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Navigate to your <a href="{{ url_for('profile') }}" style="color: #2E7D6B;">Profile page</a> by clicking your avatar in the top navigation bar. Click on the profile picture area to upload a new photo (JPG, PNG, or GIF, max 5MB). Your new picture will appear immediately in the navbar across all pages.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0 mb-3 shadow-sm">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq7" style="color: #2E7D6B; font-weight: 600;">
+                            <iconify-icon icon="streamline-ultimate:question-circle-bold" class="me-2"></iconify-icon>
+                            What happens when my subscription expires?
+                        </button>
+                    </h2>
+                    <div id="faq7" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            If your paid subscription expires, your account automatically reverts to the <strong>Free plan</strong>. Don't worry — your ranking history and profile settings are preserved. You'll simply be limited to the free tier quotas (10 CVs/day, 1 session/day) until you renew or upgrade your subscription.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-5 p-4 rounded-3" style="background-color: rgba(46, 125, 107, 0.05);">
+                <h4 class="mb-3" style="color: #2E7D6B;">Still have questions?</h4>
+                <p class="text-muted mb-3">We're here to help. Reach out to our support team.</p>
+                <a href="mailto:support@rankcv.com" class="btn" style="background-color: #2E7D6B; color: white;">
+                    <iconify-icon icon="streamline-ultimate:envelope-bold" class="me-2"></iconify-icon>
+                    Contact Support
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

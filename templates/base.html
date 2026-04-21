@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <title>{% block title %}RankCV{% endblock %}</title>
+
+    <style>
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 9999px;
+            background-color: #1e293b;
+            color: #94a3b8;
+            text-decoration: none;
+            border: 1px solid #334155;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .social-btn svg {
+            position: relative;
+            z-index: 2;
+            transition: transform 0.4s ease;
+        }
+        .social-btn:hover {
+            background-color: #2E7D6B;
+            color: #ffffff;
+            border-color: #34d399;
+            transform: translateY(-3px) scale(1.1);
+            box-shadow: 0 8px 20px rgba(52, 211, 153, 0.4);
+        }
+        .social-btn:hover svg {
+            transform: rotate(360deg) scale(1.2);
+        }
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0) translateY(10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .social-btn {
+            animation: popIn 0.5s ease backwards;
+        }
+        .social-btn:nth-child(1) { animation-delay: 0.1s; }
+        .social-btn:nth-child(2) { animation-delay: 0.25s; }
+        .social-btn:nth-child(3) { animation-delay: 0.4s; }
+        .social-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(52, 211, 153, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s ease, height 0.5s ease;
+            z-index: 1;
+        }
+        .social-btn:hover::after {
+            width: 120%;
+            height: 120%;
+        }
+        .footer-middle-strip {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            font-size: 0.8rem;
+            color: #64748b;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .footer-middle-strip > div {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+        .footer-middle-left { justify-content: flex-start; }
+        .footer-middle-center { justify-content: center; gap: 10px; }
+        .footer-middle-right { justify-content: flex-end; gap: 15px; }
+        @media (max-width: 768px) {
+            .footer-middle-strip { flex-direction: column; text-align: center; }
+            .footer-middle-strip > div { justify-content: center !important; width: 100%; }
+        }
+        .nav-profile-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #2E7D6B;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+        }
+        .nav-profile-avatar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 0 3px rgba(46, 125, 107, 0.3);
+        }
+        .nav-profile-initial {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #2E7D6B;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .nav-profile-initial:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 0 3px rgba(46, 125, 107, 0.3);
+            color: white;
+        }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<nav class="navbar navbar-light bg-white border-bottom px-5 py-3">
+    <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center fw-bold" href="/" style="color: #2E7D6B;">
+            <iconify-icon icon="streamline-ultimate:book-search-bold" style="font-size: 28px; margin-right: 8px; color: #2E7D6B;"></iconify-icon>
+            RankCV
+        </a>
+
+        <div class="d-flex align-items-center ms-auto">
+            {% if session.get('user_id') %}
+                <a href="{{ url_for('profile') }}" class="me-3" style="text-decoration: none;" title="My Profile">
+                    {% if session.get('user_profile_pic') %}
+                        <img src="{{ url_for('static', filename=session.get('user_profile_pic')) }}" 
+                             class="nav-profile-avatar" alt="Profile">
+                    {% else %}
+                        <div class="nav-profile-initial">
+                            {{ session.get('user_email', 'U')[0]|upper }}
+                        </div>
+                    {% endif %}
+                </a>
+
+                <a class="nav-link px-3 {% if request.path == '/' %}active{% endif %}" href="{{ url_for('home') }}">New Ranking</a>
+                <a class="nav-link px-3 {% if request.path == '/history' %}active{% endif %}" href="{{ url_for('history') }}">History</a>
+                <a class="nav-link px-3 {% if request.path == '/settings' %}active{% endif %}" href="{{ url_for('settings') }}">Settings</a>
+                <a class="nav-link px-3" href="{{ url_for('logout') }}" style="color: #dc3545;">
+                    <iconify-icon icon="ph:sign-out"></iconify-icon>
+                </a>
+            {% else %}
+                <a class="nav-link px-3 {% if request.path == '/login' %}active{% endif %}" href="{{ url_for('login') }}">Login</a>
+                <a class="nav-link px-3 {% if request.path == '/register' %}active{% endif %}" href="{{ url_for('register') }}">Register</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="container mt-3">
+      {% for category, message in messages %}
+        <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+            {{ message|safe }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<main class="flex-grow-1">
+    {% block content %}{% endblock %}
+</main>
+
+<footer style="background-color: #0f172a; color: #94a3b8; font-family: 'Inter', sans-serif; margin-top: 60px;">
+    <div class="container" style="padding-top: 60px; padding-bottom: 40px;">
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-4 col-12">
+                <div style="max-width: 300px;">
+                    <div class="d-flex align-items-center mb-3">
+                        <iconify-icon icon="streamline-ultimate:book-search-bold" style="font-size: 24px; margin-right: 10px; color: #34d399;"></iconify-icon>
+                        <span style="font-size: 1.5rem; font-weight: 800; color: #f8fafc; letter-spacing: -0.5px;">RankCV</span>
+                    </div>
+                    <p style="font-size: 0.9rem; color: #64748b; line-height: 1.6; margin-bottom: 16px;">AI-powered candidate ranking for modern hiring teams.</p>
+                    <span style="display: inline-flex; align-items: center; background-color: rgba(52, 211, 153, 0.1); color: #34d399; font-size: 0.75rem; font-weight: 600; padding: 6px 14px; border-radius: 9999px; border: 1px solid rgba(52, 211, 153, 0.2); letter-spacing: 0.3px;">
+                        <iconify-icon icon="ph:shield-check" style="font-size: 14px; vertical-align: middle; margin-right: 4px;"></iconify-icon>
+                        Your data is safe with us
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-6">
+                <h5 style="color: #f1f5f9; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 20px;">Product</h5>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li style="margin-bottom: 12px;"><a href="{{ url_for('how_it_works') }}" style="color: #94a3b8; text-decoration: none; font-size: 0.9rem;">How it works</a></li>
+                    <li style="margin-bottom: 12px;"><a href="{{ url_for('pricing') }}" style="color: #94a3b8; text-decoration: none; font-size: 0.9rem;">Pricing</a></li>
+                    <li style="margin-bottom: 12px;"><a href="{{ url_for('faq') }}" style="color: #94a3b8; text-decoration: none; font-size: 0.9rem;">FAQ</a></li>
+                    <li style="margin-bottom: 12px;"><a href="{{ url_for('changelog') }}" style="color: #94a3b8; text-decoration: none; font-size: 0.9rem;">Changelog</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-6">
+                <h5 style="color: #f1f5f9; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 20px;">App</h5>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li style="margin-bottom: 12px;"><a href="{{ url_for('home') }}" style="color: #94a3b8; text-decoration: none; font-size: 0.9rem;">New Ranking</a></li>
+                    <li style="margin-bottom: 12px;"><a href="{{ url_for('history') }}" style="color: #94a3b8; text-decoration: none; font-size: 0.9rem;">History</a></li>
+                    <li style="margin-bottom: 12px;"><a href="{{ url_for('settings') }}" style="color: #94a3b8; text-decoration: none; font-size: 0.9rem;">Settings</a></li>
+                    <li style="margin-bottom: 12px;"><a href="#" style="color: #94a3b8; text-decoration: none; font-size: 0.9rem;">Contact us</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div style="border-top: 1px solid #1e293b;">
+        <div class="container footer-middle-strip">
+            <div class="footer-middle-left">
+                <span>&copy; 2026 RankCV. All rights reserved.</span>
+            </div>
+            <div class="footer-middle-center">
+                <a href="https://x.com/Baron_dikachi" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Twitter/X">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                </a>
+                <a href="https://www.linkedin.com/in/dikachi-sunday-a4a380356?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="LinkedIn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                </a>
+                <a href="https://www.facebook.com/share/18H6wLY1fW/" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Facebook">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                </a>
+            </div>
+            <div class="footer-middle-right">
+                <a href="#" style="color: #64748b; text-decoration: none;">Privacy</a>
+                <a href="#" style="color: #64748b; text-decoration: none;">Terms</a>
+                <span>Made with <span style="color: #ef4444;">♥</span> in Nigeria</span>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

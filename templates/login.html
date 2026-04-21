@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Login - RankCV{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card card-custom shadow-lg p-4">
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold" style="color: #2E7D6B;">Welcome Back</h2>
+                    <p class="text-muted">Log in to your RankCV Account</p>
+                </div>
+                
+                <form method="POST" action="{{ url_for('login') }}">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Email Address</label>
+                        <input type="email" name="email" class="form-control settings-input" placeholder="you@example.com" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Password</label>
+                        <input type="password" name="password" class="form-control settings-input" placeholder="••••••••" required>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-rank btn-lg">
+                            Log In
+                            <iconify-icon icon="ph:sign-in" class="ms-2"></iconify-icon>
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="text-center mt-3">
+                    <p class="text-muted">Don't have an account? <a href="{{ url_for('register') }}" style="color: #2E7D6B; font-weight: 600;">Sign Up</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

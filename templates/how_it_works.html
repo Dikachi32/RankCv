@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}How It Works - RankCV{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold mb-3" style="color: #2E7D6B;">How RankCV Works</h1>
+                <p class="lead text-muted">AI-powered CV ranking in three simple steps</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <span class="badge rounded-pill" style="background-color: #2E7D6B; font-size: 1.2rem;">1</span>
+                            </div>
+                            <div class="mb-3">
+                                <iconify-icon icon="streamline-ultimate:upload-box-1-bold" width="48" height="48" style="color: #2E7D6B;"></iconify-icon>
+                            </div>
+                            <h4 class="card-title h5 mb-3">Upload CVs</h4>
+                            <p class="card-text text-muted">Upload multiple PDF resumes in a single batch. Drag and drop support makes it effortless to add multiple candidates at once.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <span class="badge rounded-pill" style="background-color: #2E7D6B; font-size: 1.2rem;">2</span>
+                            </div>
+                            <div class="mb-3">
+                                <iconify-icon icon="streamline-ultimate:file-edit-bold" width="48" height="48" style="color: #2E7D6B;"></iconify-icon>
+                            </div>
+                            <h4 class="card-title h5 mb-3">Add Job Description</h4>
+                            <p class="card-text text-muted">Paste the job description and requirements. Our system analyzes the key skills, experience, and qualifications needed.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <span class="badge rounded-pill" style="background-color: #2E7D6B; font-size: 1.2rem;">3</span>
+                            </div>
+                            <div class="mb-3">
+                                <iconify-icon icon="streamline-ultimate:ranking-bold" width="48" height="48" style="color: #2E7D6B;"></iconify-icon>
+                            </div>
+                            <h4 class="card-title h5 mb-3">Get Ranked Results</h4>
+                            <p class="card-text text-muted">Receive instant AI-powered rankings based on TF-IDF cosine similarity. View scores, match percentages, and detailed breakdowns.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-5 pt-5">
+                <h2 class="text-center mb-4" style="color: #2E7D6B;">The Technology Behind RankCV</h2>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <iconify-icon icon="streamline-ultimate:artificial-intelligence-spark-bold" width="32" height="32" style="color: #2E7D6B;"></iconify-icon>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5>TF-IDF Vectorization</h5>
+                                <p class="text-muted">Term Frequency-Inverse Document Frequency converts text into meaningful numerical vectors, highlighting important terms while filtering out common words.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <iconify-icon icon="streamline-ultimate:calculator-bold" width="32" height="32" style="color: #2E7D6B;"></iconify-icon>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5>Cosine Similarity</h5>
+                                <p class="text-muted">Measures the cosine of the angle between two vectors, determining how closely a candidate's CV matches the job description regardless of document length.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <iconify-icon icon="streamline-ultimate:password-lock-1-bold" width="32" height="32" style="color: #2E7D6B;"></iconify-icon>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5>Secure Processing</h5>
+                                <p class="text-muted">All CVs are processed in-memory and never stored permanently unless you explicitly choose to save them. Enterprise-grade encryption protects your data.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <iconify-icon icon="streamline-ultimate:speed-bold" width="32" height="32" style="color: #2E7D6B;"></iconify-icon>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5>Real-time Analysis</h5>
+                                <p class="text-muted">Get results in seconds, not hours. Process multiple CVs simultaneously with our optimized Python backend powered by scikit-learn.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-5 pt-4">
+                <a href="{{ url_for('home') }}" class="btn btn-lg px-5" style="background-color: #2E7D6B; color: white;">
+                    <iconify-icon icon="streamline-ultimate:rocket-launch-bold" class="me-2"></iconify-icon>
+                    Start Ranking Now
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

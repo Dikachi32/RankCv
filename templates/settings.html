@@ -1,0 +1,279 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - RankCV{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="mb-2">
+        <h1 class="fw-bold" style="font-size: 2.5rem;">Settings</h1>
+        <p class="text-muted">Adjust how RankCV screens and ranks your candidates</p>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            
+            <div class="card card-custom shadow-sm p-4 mb-4 settings-section">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">Required Experience</h5>
+                        <p class="text-muted small mb-0">Enter the minimum and maximum experience required. Only candidates within this range will be ranked.</p>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="experienceToggle" {% if user_settings and user_settings.experience_enabled %}checked{% endif %}>
+                    </div>
+                </div>
+                
+                <div id="experienceFields" class="row g-3 mt-2">
+                    <div class="col-md-6">
+                        <label class="form-label small text-muted text-uppercase fw-bold">Minimum Experience</label>
+                        <div class="input-group">
+                            <input type="number" id="minExperience" class="form-control settings-input" placeholder="e.g. 2" min="0" value="{{ user_settings.min_experience if user_settings else 0 }}">
+                            <select class="form-select settings-select" id="minExperienceUnit" style="max-width: 110px; border-left: none;">
+                                <option value="years" {% if user_settings and user_settings.min_experience_unit == 'years' %}selected{% endif %}>Years</option>
+                                <option value="months" {% if user_settings and user_settings.min_experience_unit == 'months' %}selected{% endif %}>Months</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label small text-muted text-uppercase fw-bold">Maximum Experience</label>
+                        <div class="input-group">
+                            <input type="number" id="maxExperience" class="form-control settings-input" placeholder="e.g. 6" min="0" value="{{ user_settings.max_experience if user_settings else 10 }}">
+                            <select class="form-select settings-select" id="maxExperienceUnit" style="max-width: 110px; border-left: none;">
+                                <option value="years" {% if user_settings and user_settings.max_experience_unit == 'years' %}selected{% endif %}>Years</option>
+                                <option value="months" {% if user_settings and user_settings.max_experience_unit == 'months' %}selected{% endif %}>Months</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-rank w-100 mt-4 py-2" onclick="saveSettings()">
+                    Set experience requirements <iconify-icon icon="ph:arrow-right-bold" class="ms-2"></iconify-icon>
+                </button>
+            </div>
+
+            <div class="card card-custom shadow-sm p-4 mb-4 settings-section">
+                <h5 class="fw-bold mb-3">Results Display</h5>
+                <p class="text-muted small mb-3">Manage how results appear on the screen.</p>
+                
+                <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+                    <div>
+                        <label class="fw-bold mb-0">Show score bar</label>
+                        <p class="text-muted x-small mb-0">Display visual match percentage bars in results</p>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="scoreBarToggle" {% if user_settings and user_settings.show_score_bar %}checked{% endif %}>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-custom shadow-sm p-4 mb-4 settings-section">
+                <h5 class="fw-bold mb-3">CV Limit Per Session</h5>
+                <p class="text-muted small mb-3">Control how many CVs can be processed at one time.</p>
+                
+                <div class="mb-3">
+                    <select class="form-select settings-select" id="cvLimitSelect">
+                        <option value="10" data-plan="free" data-sessions="1" {% if user_settings and user_settings.cv_limit == 10 %}selected{% endif %}>
+                            10 CVs per session (Free - 1 session/day)
+                        </option>
+                        <option value="25" data-plan="basic" data-sessions="2" {% if user_settings and user_settings.cv_limit == 25 %}selected{% endif %}>
+                            🔒 25 CVs per session (Basic - 2 sessions/day)
+                        </option>
+                        <option value="50" data-plan="pro" data-sessions="3" {% if user_settings and user_settings.cv_limit == 50 %}selected{% endif %}>
+                            🔒 50 CVs per session (Pro - 3 sessions/day)
+                        </option>
+                        <option value="unlimited" data-plan="premium" data-sessions="unlimited" {% if user_settings and user_settings.cv_limit > 50 %}selected{% endif %}>
+                            🔒 Unlimited (Premium - Unlimited sessions)
+                        </option>
+                    </select>
+                </div>
+                
+                <div id="upgradeBanner" class="upgrade-banner d-none">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="badge bg-warning text-dark mb-1">Upgrade Required</span>
+                            <p class="mb-0 small">This plan requires an active subscription</p>
+                        </div>
+                        <button class="btn btn-sm btn-success" onclick="openSubscriptionModal()">
+                            Subscribe Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-custom shadow-sm p-4 mb-4 settings-section">
+                <h5 class="fw-bold mb-3">Data Protection & Privacy</h5>
+                <p class="text-muted small mb-3">Control how your uploaded data and sessions are stored.</p>
+                
+                <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+                    <div>
+                        <label class="fw-bold mb-0">Save uploaded CVs</label>
+                        <p class="text-muted x-small mb-0">Store CVs on your device for reuse in future sessions</p>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="saveCvsToggle" {% if user_settings and user_settings.save_cvs %}checked{% endif %}>
+                    </div>
+                </div>
+                
+                <div class="pt-3">
+                    <button class="btn btn-outline-danger btn-sm border-0 fw-bold px-0" onclick="confirmDeleteHistory()">
+                        Delete all history
+                    </button>
+                    <p class="text-muted x-small mb-0">Permanently erase all previous ranking sessions.</p>
+                </div>
+            </div>
+
+            <div class="mt-5">
+                <button class="btn btn-rank btn-lg px-5 shadow-sm" onclick="saveSettings()">
+                    Save settings
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="subscriptionModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold">Choose Your Plan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="pricing-tier mb-3 p-3 border rounded" onclick="selectPlan('basic')">
+                    <div class="d-flex justify-content-between">
+                        <h6 class="fw-bold mb-0">Basic Plan</h6>
+                        <span class="fw-bold text-success">$10/month</span>
+                    </div>
+                    <p class="small text-muted mb-0">25 CVs × 2 sessions/day (50 CVs total)</p>
+                </div>
+                
+                <div class="pricing-tier mb-3 p-3 border rounded" onclick="selectPlan('pro')">
+                    <div class="d-flex justify-content-between">
+                        <h6 class="fw-bold mb-0">Pro Plan</h6>
+                        <span class="fw-bold text-success">$20/month</span>
+                    </div>
+                    <p class="small text-muted mb-0">50 CVs × 3 sessions/day (150 CVs total)</p>
+                </div>
+                
+                <div class="pricing-tier p-3 border rounded bg-light" onclick="selectPlan('premium')">
+                    <div class="d-flex justify-content-between">
+                        <h6 class="fw-bold mb-0">Premium Plan</h6>
+                        <span class="fw-bold text-success">$50/month</span>
+                    </div>
+                    <p class="small text-muted mb-0">Unlimited CVs & Unlimited sessions</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentUserPlan = 'free';
+
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('/api/usage-status')
+        .then(r => r.json())
+        .then(data => {
+            currentUserPlan = data.plan;
+            checkSubscriptionStatus();
+        })
+        .catch(() => {
+            checkSubscriptionStatus();
+        });
+
+    const cvLimitSelect = document.getElementById('cvLimitSelect');
+    if (cvLimitSelect) {
+        cvLimitSelect.addEventListener('change', function() {
+            const selected = this.options[this.selectedIndex];
+            const plan = selected.getAttribute('data-plan');
+            const currentPlan = getCurrentUserPlan();
+            
+            if (plan !== 'free' && currentPlan !== plan && currentPlan !== 'premium') {
+                document.getElementById('upgradeBanner').classList.remove('d-none');
+                this.value = '10';
+            } else {
+                document.getElementById('upgradeBanner').classList.add('d-none');
+            }
+        });
+    }
+});
+
+function getCurrentUserPlan() {
+    return currentUserPlan;
+}
+
+function openSubscriptionModal() {
+    new bootstrap.Modal(document.getElementById('subscriptionModal')).show();
+}
+
+function selectPlan(plan) {
+    window.location.href = '/subscribe/' + plan + '?token=demo-confirm';
+}
+
+function saveSettings() {
+    const minExp = document.getElementById('minExperience');
+    const maxExp = document.getElementById('maxExperience');
+    const minUnit = document.getElementById('minExperienceUnit');
+    const maxUnit = document.getElementById('maxExperienceUnit');
+    
+    const settings = {
+        experienceEnabled: document.getElementById('experienceToggle').checked,
+        minExperience: minExp ? (parseInt(minExp.value) || 0) : 0,
+        minExperienceUnit: minUnit ? minUnit.value : 'years',
+        maxExperience: maxExp ? (parseInt(maxExp.value) || 10) : 10,
+        maxExperienceUnit: maxUnit ? maxUnit.value : 'years',
+        showScoreBar: document.getElementById('scoreBarToggle').checked,
+        cvLimit: document.getElementById('cvLimitSelect').value,
+        saveCvs: document.getElementById('saveCvsToggle').checked
+    };
+    
+    fetch('/api/settings', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(settings)
+    }).then(response => {
+        if (response.ok) {
+            alert('Settings saved successfully!');
+        } else {
+            alert('Failed to save settings.');
+        }
+    }).catch(() => {
+        alert('Network error. Please try again.');
+    });
+}
+
+function confirmDeleteHistory() {
+    if (confirm('Are you sure? This will permanently delete all ranking history.')) {
+        fetch('/api/delete-history', {method: 'POST'})
+            .then(() => alert('History deleted successfully'))
+            .catch(() => alert('Failed to delete history'));
+    }
+}
+
+function checkSubscriptionStatus() {
+    const plan = getCurrentUserPlan();
+    const select = document.getElementById('cvLimitSelect');
+    if (!select) return;
+    
+    Array.from(select.options).forEach(option => {
+        const optionPlan = option.getAttribute('data-plan');
+        if (optionPlan === 'free' || optionPlan === plan || plan === 'premium') {
+            option.disabled = false;
+            option.text = option.text.replace(/🔒 /g, '');
+        } else {
+            option.disabled = true;
+            if (!option.text.includes('🔒')) {
+                option.text = '🔒 ' + option.text.replace(/🔒 /g, '');
+            }
+        }
+    });
+    
+    if (plan === 'free') select.value = '10';
+    else if (plan === 'basic') select.value = '25';
+    else if (plan === 'pro') select.value = '50';
+    else if (plan === 'premium') select.value = 'unlimited';
+}
+</script>
+
+{% endblock %}

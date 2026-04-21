@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block title %}Profile - RankCV{% endblock %}
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1 class="fw-bold mb-4" style="font-size: 2rem; color: #2D3748;">My Profile</h1>
+            
+            <div class="card card-custom shadow-sm p-4">
+                <div class="row align-items-start">
+                    
+                    <div class="col-md-4 text-center mb-4 mb-md-0">
+                        <div class="position-relative d-inline-block">
+                            {% if user.profile_pic %}
+                                <img src="{{ url_for('static', filename=user.profile_pic) }}" 
+                                     style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid #2E7D6B;">
+                            {% else %}
+                                <div style="width: 120px; height: 120px; border-radius: 50%; background-color: #2E7D6B; color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; margin: 0 auto;">
+                                    {{ user.email[0]|upper }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <form method="POST" action="{{ url_for('profile') }}" enctype="multipart/form-data" class="mt-3">
+                            <label class="btn btn-outline-secondary btn-sm" style="cursor: pointer; border-radius: 8px;">
+                                <iconify-icon icon="ph:camera" style="vertical-align: middle; margin-right: 4px;"></iconify-icon>
+                                Change Photo
+                                <input type="file" name="profile_pic" accept="image/*" style="display: none;" onchange="this.form.submit()">
+                            </label>
+                        </form>
+                    </div>
+                    
+                    <div class="col-md-8">
+                        <h4 class="fw-bold mb-1" style="color: #2D3748;">{{ user.email }}</h4>
+                        <p class="text-muted mb-4" style="font-size: 0.9rem;">Member since {{ user.created_at.strftime('%B %Y') }}</p>
+                        
+                        <a href="{{ url_for('pricing') }}" style="text-decoration: none; display: block;">
+                            <div class="p-3 rounded mb-3" style="background-color: #F8FAFC; border: 1px solid #E2E8F0; transition: all 0.2s; cursor: pointer;">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="fw-bold" style="color: #2D3748;">Current Plan</span>
+                                    <span class="badge" style="background-color: {% if user.subscription_plan == 'free' %}#94a3b8{% elif user.subscription_plan == 'premium' %}#2E7D6B{% else %}#3182CE{% endif %}; color: white; text-transform: uppercase; font-size: 0.75rem; padding: 6px 12px; border-radius: 6px;">
+                                        {{ user.subscription_plan }}
+                                    </span>
+                                </div>
+                                
+                                {% if user.subscription_plan == 'free' %}
+                                    <p class="text-muted small mb-3">You are on the free plan. Click to upgrade and process more CVs per day.</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <span class="small text-muted">{{ sessions_used }} / {{ plan_limits.max_sessions }} sessions used today</span>
+                                            <div class="progress mt-1" style="height: 4px; width: 100px;">
+                                                <div class="progress-bar" style="width: {{ (sessions_used / plan_limits.max_sessions * 100) }}%; background-color: #2E7D6B !important;"></div>
+                                            </div>
+                                        </div>
+                                        <span class="badge bg-success" style="font-size: 0.7rem;">Click to Upgrade →</span>
+                                    </div>
+                                {% else %}
+                                    <p class="text-muted small mb-3">You have access to 
+                                        {% if plan_limits.cvs_per_session > 1000 %}Unlimited{% else %}{{ plan_limits.cvs_per_session }}{% endif %} 
+                                        CVs per session. Click to change plan.
+                                    </p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            {% if plan_limits.max_sessions > 1000 %}
+                                                <span class="small text-muted">Unlimited sessions</span>
+                                            {% else %}
+                                                <span class="small text-muted">{{ sessions_used }} / {{ plan_limits.max_sessions }} sessions used today</span>
+                                                <div class="progress mt-1" style="height: 4px; width: 100px;">
+                                                    <div class="progress-bar" style="width: {{ (sessions_used / plan_limits.max_sessions * 100) }}%; background-color: #2E7D6B !important;"></div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        {% if user.subscription_expires %}
+                                            <span class="small text-muted">Expires: {{ user.subscription_expires.strftime('%b %d, %Y') }}</span>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </a>
+
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <div class="p-3 rounded text-center" style="background-color: #F0FDF4; border: 1px solid #bbf7d0;">
+                                    <div class="fw-bold" style="color: #2E7D6B; font-size: 1.2rem;">
+                                        {% if plan_limits.cvs_per_session > 1000 %}&infin;{% else %}{{ plan_limits.cvs_per_session }}{% endif %}
+                                    </div>
+                                    <div class="small text-muted">CVs per session</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-3 rounded text-center" style="background-color: #EFF6FF; border: 1px solid #bfdbfe;">
+                                    <div class="fw-bold" style="color: #3182CE; font-size: 1.2rem;">
+                                        {% if plan_limits.max_sessions > 1000 %}&infin;{% else %}{{ plan_limits.max_sessions }}{% endif %}
+                                    </div>
+                                    <div class="small text-muted">Sessions per day</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3" style="border-top: 1px solid #E2E8F0;">
+                            <a href="{{ url_for('pricing') }}" class="btn btn-sm me-2" style="background-color: #2E7D6B; color: white; border-radius: 8px;">
+                                <iconify-icon icon="ph:crown" style="vertical-align: middle;"></iconify-icon>
+                                {% if user.subscription_plan == 'free' %}Upgrade Plan{% else %}Change Plan{% endif %}
+                            </a>
+                            <a href="{{ url_for('settings') }}" class="btn btn-outline-secondary btn-sm me-2">
+                                <iconify-icon icon="ph:gear" style="vertical-align: middle;"></iconify-icon>
+                                Settings
+                            </a>
+                            <a href="{{ url_for('history') }}" class="btn btn-outline-secondary btn-sm">
+                                <iconify-icon icon="ph:clock-counter-clockwise" style="vertical-align: middle;"></iconify-icon>
+                                History
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

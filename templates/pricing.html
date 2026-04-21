@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Pricing - RankCV{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+
+    <div class="alert text-center py-3 mb-4" style="background-color: #FFFBEB; border: 1px solid #FCD34D; color: #92400E; border-radius: 12px;">
+        <iconify-icon icon="ph:warning-circle" style="font-size: 20px; vertical-align: middle; margin-right: 8px; color: #D97706;"></iconify-icon>
+        <strong>Demo Mode:</strong> No real payment is processed. Clicking upgrade will instantly activate the plan for testing purposes only.
+    </div>
+
+    <div class="text-center mb-5">
+        <h1 class="fw-bold" style="font-size: 2.5rem; color: #2D3748;">Choose Your Plan</h1>
+        <p class="text-muted">Upgrade to process more CVs and unlock unlimited sessions.</p>
+    </div>
+
+    <div class="row justify-content-center g-4">
+        
+        <div class="col-md-3">
+            <div class="card h-100 text-center p-4" style="border-radius: 16px; border: 2px solid {% if current_plan == 'free' %}#2E7D6B{% else %}#E2E8F0{% endif %};">
+                <h5 class="fw-bold text-uppercase" style="color: #64748b; font-size: 0.85rem; letter-spacing: 1px;">Free</h5>
+                <div class="my-3">
+                    <span class="fw-bold" style="font-size: 2.5rem; color: #2D3748;">$0</span>
+                    <span class="text-muted">/month</span>
+                </div>
+                <ul class="list-unstyled text-start mb-4" style="font-size: 0.9rem; color: #4A5568;">
+                    <li class="mb-2"><iconify-icon icon="ph:check" style="color: #2E7D6B; margin-right: 8px;"></iconify-icon>10 CVs per session</li>
+                    <li class="mb-2"><iconify-icon icon="ph:check" style="color: #2E7D6B; margin-right: 8px;"></iconify-icon>1 session per day</li>
+                    <li class="mb-2"><iconify-icon icon="ph:check" style="color: #2E7D6B; margin-right: 8px;"></iconify-icon>Basic ranking</li>
+                    <li class="mb-2 text-muted"><iconify-icon icon="ph:x" style="color: #CBD5E0; margin-right: 8px;"></iconify-icon>Priority support</li>
+                </ul>
+                {% if current_plan == 'free' %}
+                    <button class="btn w-100 py-2 fw-bold" style="border-radius: 10px; background-color: #E2E8F0; color: #64748b; border: none;" disabled>Current Plan</button>
+                {% else %}
+                    <a href="{{ url_for('subscribe', plan='free', token='demo-confirm') }}" class="btn btn-outline-secondary w-100 py-2 fw-bold" style="border-radius: 10px;">Downgrade</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card h-100 text-center p-4" style="border-radius: 16px; border: 2px solid {% if current_plan == 'basic' %}#3182CE{% else %}#E2E8F0{% endif %};">
+                <h5 class="fw-bold text-uppercase" style="color: #3182CE; font-size: 0.85rem; letter-spacing: 1px;">Basic</h5>
+                <div class="my-3">
+                    <span class="fw-bold" style="font-size: 2.5rem; color: #2D3748;">$10</span>
+                    <span class="text-muted">/month</span>
+                </div>
+                <ul class="list-unstyled text-start mb-4" style="font-size: 0.9rem; color: #4A5568;">
+                    <li class="mb-2"><iconify-icon icon="ph:check" style="color: #2E7D6B; margin-right: 8px;"></iconify-icon>25 CVs per session</li>
+                    <li class="mb-2"><iconify-icon icon="ph:check" style="color: #2E7D6B; margin-right: 8px;"></iconify-icon>2 sessions per day</li>
+                    <li class="mb-2"><iconify-icon icon="ph:check" style="color: #2E7D6B; margin-right: 8px;"></iconify-icon>Advanced ranking</li>
+                    <li class="mb-2 text-muted"><iconify-icon icon="ph:x" style="color: #CBD5E0; margin-right: 8px;"></iconify-icon>Priority support</li>
+                </ul>
+                {% if current_plan == 'basic' %}
+                    <button class="btn w-100 py-2 fw-bold" style="border-radius: 10px; background-color: #3182CE; color: white; border: none;" disabled>Current Plan</button>
+                {% else %}
+                    <a href="{{ url_for('subscribe', plan='basic', token='demo-confirm') }}" class="btn w-100 py-2 fw-bold" style="border-radius: 10px; background-color: #3182CE; color: white; border: none;">Upgrade to Basic</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card h-100 text-center p-4" style="border-radius: 16px; border: 2px solid {% if current_plan == 'pro' %}#805AD5{% else %}#E2E8F0{% endif %};">
+                <h5 class="fw-bold text-uppercase" style="color: #805AD5; font-size: 0.85rem; letter-spacing: 1px;">Pro</h5>
+                <div class="my-3">
+                    <span class="fw-bold" style="font-size: 2.5rem; color: #2D3748;">$20</span>
+                    <span class="text-muted">/month</span>
+                </div>
+                <ul class="list-unstyled text-start mb-4" style="font-size: 0.9rem; color: #4A5568;">
+                    <li class="mb-2"><iconify-icon icon="ph:check" style="color: #2E7D6B; margin-right: 8px;"></iconify-icon>50 CVs per session</li>
+                    <li class="mb-2"><iconify-icon icon="ph:check" style="color: #2E7D6B; margin-right: 8px;"></iconify-icon>3 sessions per day</li>
+                    <li class="mb-2"><iconify-icon icon="ph:check" style="color: #2E7D6B; margin-right: 8px;"></iconify-icon>Advanced ranking</li>
+                    <li class="mb-2"><iconify-icon icon="ph:check" style="color: #2E7D6B; margin-right: 8px;"></iconify-icon>Priority support</li>
+                </ul>
+                {% if current_plan == 'pro' %}
+                    <button class="btn w-100 py-2 fw-bold" style="border-radius: 10px; background-color: #805AD5; color: white; border: none;" disabled>Current Plan</button>
+                {% else %}
+                    <a href="{{ url_for('subscribe', plan='pro', token='demo-confirm') }}" class="btn w-100 py-2 fw-bold" style="border-radius: 10px; background-color: #805AD5; color: white; border: none;">Upgrade to Pro</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card h-100 text-center p-4 position-relative" style="border-radius: 16px; border: 2px solid {% if current_plan == 'premium' %}#2E7D6B{% else %}#E2E8F0{% endif %};">
+                {% if current_plan != 'premium' %}
+                    <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill" style="background-color: #2E7D6B; font-size: 0.7rem; padding: 8px 12px;">RECOMMENDED</span>
+                {% endif %}
+                <h5 class="fw-bold text-uppercase" style="color: #2E7D6B; font-size: 0.85rem; letter-spacing: 1px;">Premium</h5>
+                <div class="my-3">
+                    <span class="fw-bold" style="font-size: 2.5rem; color: #2D3748;">$50</span>
+                    <span class="text-muted">/month</span>
+                </div>
+                <ul class="list-unstyled text-start mb-4" style="font-size: 0.9rem; color: #4A5568;">
+                    <li class="mb-2"><iconify-icon icon="ph:check" style="color: #2E7D6B; margin-right: 8px;"></iconify-icon>Unlimited CVs</li>
+                    <li class="mb-2"><iconify-icon icon="ph:check" style="color: #2E7D6B; margin-right: 8px;"></iconify-icon>Unlimited sessions</li>
+                    <li class="mb-2"><iconify-icon icon="ph:check" style="color: #2E7D6B; margin-right: 8px;"></iconify-icon>Advanced ranking</li>
+                    <li class="mb-2"><iconify-icon icon="ph:check" style="color: #2E7D6B; margin-right: 8px;"></iconify-icon>Priority support</li>
+                </ul>
+                {% if current_plan == 'premium' %}
+                    <button class="btn w-100 py-2 fw-bold" style="border-radius: 10px; background-color: #2E7D6B; color: white; border: none;" disabled>Current Plan</button>
+                {% else %}
+                    <a href="{{ url_for('subscribe', plan='premium', token='demo-confirm') }}" class="btn w-100 py-2 fw-bold" style="border-radius: 10px; background-color: #2E7D6B; color: white; border: none;">Go Premium</a>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    <div class="text-center mt-4">
+        <p class="text-muted small">
+            <iconify-icon icon="ph:shield-check" style="vertical-align: middle; color: #2E7D6B;"></iconify-icon>
+            Secure payment processing. Cancel anytime.
+        </p>
+    </div>
+</div>
+{% endblock %}

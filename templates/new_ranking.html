@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block title %}{% if view_mode %}View Past Ranking{% else %}New Ranking{% endif %} - RankCV{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+
+    {% if view_mode %}
+    <div class="alert alert-info mb-4 d-flex justify-content-between align-items-center">
+        <div>
+            <strong>📋 Viewing Past Session</strong>
+            <p class="mb-0 small">This is a previously saved ranking from {{ job }}. You cannot modify it.</p>
+        </div>
+        <a href="{{ url_for('history') }}" class="btn btn-sm btn-outline-secondary">
+            <iconify-icon icon="ph:arrow-left"></iconify-icon>
+            Back to History
+        </a>
+    </div>
+    {% endif %}
+
+    <div class="mb-4">
+        <h1 class="fw-bold" style="font-size: 2.5rem;">{% if view_mode %}Past Ranking Results{% else %}Candidate Ranking{% endif %}</h1>
+        <p class="text-muted">
+            {% if view_mode %}
+            These are the results from your previous ranking session.
+            {% else %}
+            Paste a job description, upload CVs, and instantly get a ranked list of the most suitable candidates.
+            {% endif %}
+        </p>
+    </div>
+
+    {% if results %}
+    
+    <div class="row mb-4">
+        <div class="col">
+            <div class="stat-card text-center">
+                <div class="stat-number">{{ results|length }}</div>
+                <div class="stat-label">Total</div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="stat-card text-center stat-green">
+                <div class="stat-number">{{ results|selectattr("score", "ge", 90)|list|length }}</div>
+                <div class="stat-label">90-100%</div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="stat-card text-center stat-yellow">
+                <div class="stat-number">{{ results|selectattr("score", "ge", 70)|selectattr("score", "lt", 90)|list|length }}</div>
+                <div class="stat-label">70-90%</div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="stat-card text-center stat-orange">
+                <div class="stat-number">{{ results|selectattr("score", "ge", 50)|selectattr("score", "lt", 70)|list|length }}</div>
+                <div class="stat-label">50-70%</div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="stat-card text-center stat-red">
+                <div class="stat-number">{{ results|selectattr("score", "lt", 50)|list|length }}</div>
+                <div class="stat-label">Below 50%</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="filter-tabs mb-3">
+        <button class="filter-tab active" onclick="filterCandidates('all', this)">All</button>
+        <button class="filter-tab" onclick="filterCandidates('90-100', this)">90-100%</button>
+        <button class="filter-tab" onclick="filterCandidates('70-90', this)">70-90%</button>
+        <button class="filter-tab" onclick="filterCandidates('50-70', this)">50-70%</button>
+        <button class="filter-tab" onclick="filterCandidates('below-50', this)">Below 50%</button>
+    </div>
+
+    <div class="results-header mb-3">
+        <span class="result-arrow">Result →</span>
+        <span class="result-count">{{ results|length }} Candidates Ranked</span>
+    </div>
+
+    <div class="card card-custom shadow-sm" id="candidatesList">
+        {% for candidate in results %}
+        <div class="candidate-row row align-items-center py-3 px-4 border-bottom" 
+             data-score="{{ candidate.score }}" 
+             data-rank="{{ loop.index }}">
+            
+            <div class="col-1">
+                <span class="rank-number">#{{ loop.index }}</span>
+            </div>
+            
+            <div class="col-1">
+                {% set initial = candidate.name[0]|upper if candidate.name else '?' %}
+                <div class="avatar-circle 
+                    {% if candidate.score >= 90 %}avatar-green
+                    {% elif candidate.score >= 70 %}avatar-yellow
+                    {% elif candidate.score >= 50 %}avatar-orange
+                    {% else %}avatar-red{% endif %}">
+                    {{ initial }}
+                </div>
+            </div>
+            
+            <div class="col-4">
+                <div class="fw-bold">{{ candidate.name }}</div>
+                <div class="text-muted small">Candidate #{{ loop.index }}</div>
+            </div>
+            
+            <div class="col-4">
+                <div class="progress ranking-progress">
+                    <div class="progress-bar 
+                        {% if candidate.score >= 90 %}bg-success
+                        {% elif candidate.score >= 70 %}bg-warning
+                        {% elif candidate.score >= 50 %}bg-orange
+                        {% else %}bg-danger{% endif %}" 
+                        style="width: {{ candidate.score }}%;">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-2 text-end">
+                <span class="score-badge 
+                    {% if candidate.score >= 90 %}text-success
+                    {% elif candidate.score >= 70 %}text-warning
+                    {% elif candidate.score >= 50 %}text-orange
+                    {% else %}text-danger{% endif %}">
+                    {{ candidate.score }}%
+                </span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="mt-4 text-center">
+        <a href="{{ url_for('home') }}" class="btn btn-rank px-5">
+            Start New Ranking
+            <iconify-icon icon="ph:arrow-right-bold" class="ms-2"></iconify-icon>
+        </a>
+    </div>
+
+    {% else %}
+    
+    <div class="text-center py-5">
+        <iconify-icon icon="ph:files" style="font-size: 60px; color: #CBD5E0;"></iconify-icon>
+        <h4 class="fw-bold text-muted mt-3">No Results Found</h4>
+        <p class="text-muted">This session may have been deleted or corrupted.</p>
+        <a href="{{ url_for('home') }}" class="btn btn-rank px-4 mt-2">Start a New Ranking</a>
+    </div>
+    
+    {% endif %}
+</div>
+
+<script>
+function filterCandidates(range, btn) {
+    document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    
+    const rows = document.querySelectorAll('.candidate-row');
+    rows.forEach(row => {
+        const score = parseInt(row.dataset.score);
+        let show = false;
+        
+        switch(range) {
+            case 'all': show = true; break;
+            case '90-100': show = score >= 90; break;
+            case '70-90': show = score >= 70 && score < 90; break;
+            case '50-70': show = score >= 50 && score < 70; break;
+            case 'below-50': show = score < 50; break;
+        }
+        
+        row.style.display = show ? 'flex' : 'none';
+    });
+}
+</script>
+
+{% endblock %}
