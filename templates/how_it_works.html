@@ -1,120 +1,189 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block title %}How It Works - RankCV{% endblock %}
+{% block title %}How It Works — RankCV{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-10">
-            <div class="text-center mb-5">
-                <h1 class="display-5 fw-bold mb-3" style="color: #2E7D6B;">How RankCV Works</h1>
-                <p class="lead text-muted">AI-powered CV ranking in three simple steps</p>
+<style>
+    .hiw-hero {
+        text-align: center;
+        padding: 50px 20px 30px;
+    }
+    .hiw-hero h1 {
+        color: #2E7D6B;
+        font-weight: 800;
+        font-size: 2.5rem;
+        margin-bottom: 8px;
+    }
+    .hiw-hero p {
+        color: #64748b;
+        font-size: 1.1rem;
+    }
+    .hiw-step-card {
+        background: white;
+        border-radius: 16px;
+        padding: 40px 30px;
+        text-align: center;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        border: 1px solid #e2e8f0;
+        height: 100%;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .hiw-step-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(46, 125, 107, 0.12);
+    }
+    .hiw-step-number {
+        width: 50px;
+        height: 50px;
+        background: #2E7D6B;
+        color: white;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+    }
+    .hiw-step-card h3 {
+        color: #1e293b;
+        font-weight: 700;
+        font-size: 1.25rem;
+        margin-bottom: 12px;
+    }
+    .hiw-step-card p {
+        color: #64748b;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin: 0;
+    }
+    .hiw-tech-section {
+        background: white;
+        border-radius: 16px;
+        padding: 50px 40px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        border: 1px solid #e2e8f0;
+    }
+    .hiw-tech-section h2 {
+        text-align: center;
+        color: #2E7D6B;
+        font-weight: 800;
+        font-size: 1.8rem;
+        margin-bottom: 40px;
+    }
+    .hiw-tech-item {
+        padding: 20px;
+    }
+    .hiw-tech-item h4 {
+        color: #1e293b;
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .hiw-tech-item h4::before {
+        content: "▸";
+        color: #2E7D6B;
+        font-size: 1.3rem;
+    }
+    .hiw-tech-item p {
+        color: #64748b;
+        font-size: 0.92rem;
+        line-height: 1.6;
+        padding-left: 24px;
+        margin: 0;
+    }
+    .hiw-badge {
+        display: inline-block;
+        background: #e8f5e9;
+        color: #2E7D6B;
+        padding: 3px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        margin-left: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+</style>
+
+<div class="container" style="max-width: 1100px; padding-bottom: 60px;">
+    
+    <!-- Hero -->
+    <div class="hiw-hero">
+        <h1>How RankCV Works</h1>
+        <p>AI-powered CV ranking powered by semantic understanding</p>
+    </div>
+
+    <!-- 3 Steps -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="hiw-step-card">
+                <div class="hiw-step-number">1</div>
+                <h3>Upload CVs</h3>
+                <p>Upload multiple PDF resumes in a single batch. Drag and drop support makes it effortless to add multiple candidates at once. Our system extracts clean text using <strong>pdfplumber</strong>.</p>
             </div>
-
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center p-4">
-                            <div class="mb-3">
-                                <span class="badge rounded-pill" style="background-color: #2E7D6B; font-size: 1.2rem;">1</span>
-                            </div>
-                            <div class="mb-3">
-                                <iconify-icon icon="streamline-ultimate:upload-box-1-bold" width="48" height="48" style="color: #2E7D6B;"></iconify-icon>
-                            </div>
-                            <h4 class="card-title h5 mb-3">Upload CVs</h4>
-                            <p class="card-text text-muted">Upload multiple PDF resumes in a single batch. Drag and drop support makes it effortless to add multiple candidates at once.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center p-4">
-                            <div class="mb-3">
-                                <span class="badge rounded-pill" style="background-color: #2E7D6B; font-size: 1.2rem;">2</span>
-                            </div>
-                            <div class="mb-3">
-                                <iconify-icon icon="streamline-ultimate:file-edit-bold" width="48" height="48" style="color: #2E7D6B;"></iconify-icon>
-                            </div>
-                            <h4 class="card-title h5 mb-3">Add Job Description</h4>
-                            <p class="card-text text-muted">Paste the job description and requirements. Our system analyzes the key skills, experience, and qualifications needed.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center p-4">
-                            <div class="mb-3">
-                                <span class="badge rounded-pill" style="background-color: #2E7D6B; font-size: 1.2rem;">3</span>
-                            </div>
-                            <div class="mb-3">
-                                <iconify-icon icon="streamline-ultimate:ranking-bold" width="48" height="48" style="color: #2E7D6B;"></iconify-icon>
-                            </div>
-                            <h4 class="card-title h5 mb-3">Get Ranked Results</h4>
-                            <p class="card-text text-muted">Receive instant AI-powered rankings based on TF-IDF cosine similarity. View scores, match percentages, and detailed breakdowns.</p>
-                        </div>
-                    </div>
-                </div>
+        </div>
+        <div class="col-md-4">
+            <div class="hiw-step-card">
+                <div class="hiw-step-number">2</div>
+                <h3>Add Job Description</h3>
+                <p>Paste the job description and requirements. Our AI analyzes the key skills, experience, and qualifications needed — understanding <strong>synonyms and context</strong>, not just exact words.</p>
             </div>
-
-            <div class="mt-5 pt-5">
-                <h2 class="text-center mb-4" style="color: #2E7D6B;">The Technology Behind RankCV</h2>
-                <div class="row g-4">
-                    <div class="col-md-6">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0">
-                                <iconify-icon icon="streamline-ultimate:artificial-intelligence-spark-bold" width="32" height="32" style="color: #2E7D6B;"></iconify-icon>
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <h5>TF-IDF Vectorization</h5>
-                                <p class="text-muted">Term Frequency-Inverse Document Frequency converts text into meaningful numerical vectors, highlighting important terms while filtering out common words.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0">
-                                <iconify-icon icon="streamline-ultimate:calculator-bold" width="32" height="32" style="color: #2E7D6B;"></iconify-icon>
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <h5>Cosine Similarity</h5>
-                                <p class="text-muted">Measures the cosine of the angle between two vectors, determining how closely a candidate's CV matches the job description regardless of document length.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0">
-                                <iconify-icon icon="streamline-ultimate:password-lock-1-bold" width="32" height="32" style="color: #2E7D6B;"></iconify-icon>
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <h5>Secure Processing</h5>
-                                <p class="text-muted">All CVs are processed in-memory and never stored permanently unless you explicitly choose to save them. Enterprise-grade encryption protects your data.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0">
-                                <iconify-icon icon="streamline-ultimate:speed-bold" width="32" height="32" style="color: #2E7D6B;"></iconify-icon>
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <h5>Real-time Analysis</h5>
-                                <p class="text-muted">Get results in seconds, not hours. Process multiple CVs simultaneously with our optimized Python backend powered by scikit-learn.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-center mt-5 pt-4">
-                <a href="{{ url_for('home') }}" class="btn btn-lg px-5" style="background-color: #2E7D6B; color: white;">
-                    <iconify-icon icon="streamline-ultimate:rocket-launch-bold" class="me-2"></iconify-icon>
-                    Start Ranking Now
-                </a>
+        </div>
+        <div class="col-md-4">
+            <div class="hiw-step-card">
+                <div class="hiw-step-number">3</div>
+                <h3>Get Ranked Results</h3>
+                <p>Receive instant AI-powered rankings based on <strong>semantic similarity</strong>. View match percentages and see which candidates truly fit the role, not just keyword-stuffed resumes.</p>
             </div>
         </div>
     </div>
+
+    <!-- Technology -->
+    <div class="hiw-tech-section">
+        <h2>The Technology Behind RankCV</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="hiw-tech-item">
+                    <h4>Semantic Embeddings <span class="hiw-badge">New</span></h4>
+                    <p>We use the <strong>all-MiniLM-L6-v2</strong> transformer model from sentence-transformers to convert text into 384-dimensional vectors. This captures meaning — so "Python developer" and "Python programmer" score as highly similar.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="hiw-tech-item">
+                    <h4>Smart Chunking</h4>
+                    <p>Long CVs are split into ~150-word chunks before embedding. We score the best-matching chunk against your job description, ensuring a 2-page CV and a 10-page CV compete fairly.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="hiw-tech-item">
+                    <h4>Keyword Overlap</h4>
+                    <p>A secondary keyword-matching layer extracts important technical terms from the job description and checks their presence in each CV. This adds robustness for exact skill requirements.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="hiw-tech-item">
+                    <h4>Advanced PDF Extraction</h4>
+                    <p>We use <strong>pdfplumber</strong> for high-quality text extraction from modern PDFs, with PyPDF2 as a fallback. Handles multi-column layouts, tables, and formatted resumes.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="hiw-tech-item">
+                    <h4>Cosine Similarity</h4>
+                    <p>Measures the cosine of the angle between the job description embedding and each CV chunk embedding, determining how closely a candidate's experience matches the role.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="hiw-tech-item">
+                    <h4>Real-time Analysis</h4>
+                    <p>Get results in seconds, not hours. Process multiple CVs simultaneously with our optimized Python backend powered by PyTorch and scikit-learn.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 {% endblock %}
