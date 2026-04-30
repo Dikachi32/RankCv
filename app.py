@@ -107,7 +107,7 @@ def preprocess_text(text):
     if not text:
         return ""
     text = text.lower()
-    text = re.sub(r'[\/\|\-\\–\—\•\·\⋅\>\<\[\]\{\}\(\)\:\;\,\"\']', ' ', text)
+    text = re.sub(r'[\/\|\-\\–\—\•\·\⋅\>\<\[\]\{\}\(\)\:\;\,\"\'"]', ' ', text)
     text = re.sub(r'http\S+|www\.\S+', ' ', text)
     text = re.sub(r'\S+@\S+\.\S+', ' ', text)
     text = re.sub(r'[^\w\s\.\+\#]', ' ', text)
@@ -746,6 +746,10 @@ def presentation():
 @app.errorhandler(404)
 def not_found(e):
     return "<h1 style='text-align:center;margin-top:50px;'>404 — Page Not Found</h1><p style='text-align:center;'><a href='/'>Go Home</a></p>", 404
+
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
 
 if __name__ == '__main__':
     with app.app_context():
